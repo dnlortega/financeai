@@ -15,30 +15,24 @@ export const getDashboard = async (month: string, year: string) => {
       lt: new Date(`${year}-${month}-31`),
     },
   };
-  const depositsTotal = Number(
-    (
-      await db.transaction.aggregate({
+  const [depositsTotalAggregate, investmentsTotalAggregate, expensesTotalAggregate] =
+    await Promise.all([
+      db.transaction.aggregate({
         where: { ...where, type: "DEPOSIT" },
         _sum: { amount: true },
-      })
-    )?._sum?.amount,
-  );
-  const investmentsTotal = Number(
-    (
-      await db.transaction.aggregate({
+      }),
+      db.transaction.aggregate({
         where: { ...where, type: "INVESTMENT" },
         _sum: { amount: true },
-      })
-    )?._sum?.amount,
-  );
-  const expensesTotal = Number(
-    (
-      await db.transaction.aggregate({
+      }),
+      db.transaction.aggregate({
         where: { ...where, type: "EXPENSE" },
         _sum: { amount: true },
-      })
-    )?._sum?.amount,
-  );
+      }),
+    ]);
+  const depositsTotal = Number(depositsTotalAggregate._sum?.amount || 0);
+  const investmentsTotal = Number(investmentsTotalAggregate._sum?.amount || 0);
+  const expensesTotal = Number(expensesTotalAggregate._sum?.amount || 0);
   const balance = depositsTotal + investmentsTotal - expensesTotal;
   const transactionsTotal = Number(
     (

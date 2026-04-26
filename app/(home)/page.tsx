@@ -32,10 +32,13 @@ const Home = async (props: HomeProps) => {
   if (monthIsInvalid || yearIsInvalid) {
     redirect(`?month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}`);
   }
-  const dashboard = await getDashboard(month, year);
-  const availableMonths = await getAvailableMonths();
-  const userCanAddTransaction = await canUserAddTransaction();
-  const user = await (await clerkClient()).users.getUser(userId);
+  const [dashboard, availableMonths, userCanAddTransaction, user] =
+    await Promise.all([
+      getDashboard(month, year),
+      getAvailableMonths(),
+      canUserAddTransaction(),
+      (await clerkClient()).users.getUser(userId),
+    ]);
   return (
     <>
       <Navbar />
