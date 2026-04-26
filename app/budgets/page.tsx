@@ -21,9 +21,9 @@ const BudgetsPage = async () => {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col space-y-6 p-6 md:p-10 max-w-4xl mx-auto w-full">
+      <div className="flex flex-col space-y-6 p-4 md:p-10 max-w-4xl mx-auto w-full">
         <div>
-          <h1 className="text-2xl font-bold">Limites de Gastos</h1>
+          <h1 className="text-xl md:text-2xl font-bold">Limites de Gastos</h1>
           <p className="text-muted-foreground text-foreground opacity-70">
             Gerencie seu orçamento global e por categoria.
           </p>

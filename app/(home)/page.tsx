@@ -47,9 +47,9 @@ const Home = async (props: HomeProps) => {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col space-y-4 p-6 md:space-y-6">
+      <div className="flex flex-col space-y-4 p-4 md:p-6 md:space-y-6">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <h1 className="text-xl md:text-2xl font-bold">Dashboard</h1>
           <div className="flex flex-wrap items-center gap-3">
             <AiReportButton
               month={month}

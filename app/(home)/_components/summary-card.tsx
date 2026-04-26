@@ -36,7 +36,7 @@ const SummaryCard = ({
       <CardContent className="space-y-4">
         <div className="flex justify-between items-center">
           <p
-            className={`font-bold ${size === "small" ? "text-2xl" : "text-4xl"}`}
+            className={`font-bold ${size === "small" ? "text-2xl" : "text-2xl md:text-4xl"}`}
           >
             {Intl.NumberFormat("pt-BR", {
               style: "currency",

@@ -18,10 +18,10 @@ const InvestmentsPage = async () => {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col space-y-6 p-6">
+      <div className="flex flex-col space-y-6 p-4 md:p-6">
         {/* TÍTULO E BOTÃO */}
         <div className="flex w-full items-center justify-between">
-          <h1 className="text-2xl font-bold">Investimentos</h1>
+          <h1 className="text-xl md:text-2xl font-bold">Investimentos</h1>
           <AddInvestmentButton />
         </div>
         <ScrollArea className="h-full">
