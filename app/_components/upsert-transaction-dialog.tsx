@@ -117,7 +117,7 @@ const UpsertTransactionDialog = ({
       }}
     >
       <DialogTrigger asChild></DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {isUpdate ? "Atualizar" : "Criar"} transação
@@ -126,7 +126,7 @@ const UpsertTransactionDialog = ({
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="name"
@@ -173,7 +173,7 @@ const UpsertTransactionDialog = ({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a verified email to display" />
+                        <SelectValue placeholder="Selecione o tipo..." />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -253,7 +253,7 @@ const UpsertTransactionDialog = ({
                 </FormItem>
               )}
             />
-            <DialogFooter>
+            <DialogFooter className="pt-4">
               <DialogClose asChild>
                 <Button type="button" variant="outline">
                   Cancelar
