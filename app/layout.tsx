@@ -11,10 +11,12 @@ const mulish = Mulish({
 export const metadata: Metadata = {
   title: "Finance AI - Gestão Financeira Inteligente",
   description: "Gerencie suas finanças com o poder da inteligência artificial.",
+  manifest: "/manifest.json",
 };
 
 import { ThemeProvider } from "./_components/theme-provider";
 import { Toaster } from "@/app/_components/ui/sonner";
+import BottomNav from "./_components/bottom-nav";
 
 export default function RootLayout({
   children,
@@ -35,10 +37,11 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className="flex h-full flex-col overflow-y-auto">
+            <div className="flex h-full flex-col overflow-y-auto pb-20 md:pb-0">
               {children}
             </div>
             <Toaster />
+            <BottomNav />
           </ThemeProvider>
         </ClerkProvider>
       </body>

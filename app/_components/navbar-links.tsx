@@ -3,10 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const NavbarLinks = () => {
+interface NavbarLinksProps {
+  className?: string;
+}
+
+const NavbarLinks = ({ className }: NavbarLinksProps) => {
   const pathname = usePathname();
   return (
-    <div className="flex items-center gap-4 md:gap-10">
+    <div className={`flex items-center gap-4 md:gap-10 ${className}`}>
       <Link
         href="/"
         className={

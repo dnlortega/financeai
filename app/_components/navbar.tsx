@@ -21,7 +21,7 @@ const Navbar = () => {
           alt="Finance AI"
           className="shrink-0 md:hidden"
         />
-        <NavbarLinks />
+        <NavbarLinks className="hidden md:flex" />
       </div>
       {/* DIREITA */}
       <NavbarRight />
