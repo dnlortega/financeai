@@ -23,13 +23,12 @@ export const POST = async (request: Request) => {
 
     switch (event.type) {
       case "checkout.session.completed": {
-        const session = event.data.object as any;
+        const session = event.data.object as Stripe.Checkout.Session;
         
         // Tenta pegar o ID de vários lugares diferentes para ter certeza
         const clerkUserId = 
           session.metadata?.clerk_user_id || 
-          session.subscription_data?.metadata?.clerk_user_id ||
-          (session.subscription ? (await stripe.subscriptions.retrieve(session.subscription)).metadata.clerk_user_id : null);
+          (session.subscription ? (await stripe.subscriptions.retrieve(session.subscription as string)).metadata.clerk_user_id : null);
 
         if (!clerkUserId) {
           console.error("Webhook Error: clerk_user_id not found in any metadata field", session.id);
@@ -45,7 +44,7 @@ export const POST = async (request: Request) => {
         break;
       }
       case "customer.subscription.deleted": {
-        const subscription = event.data.object as any;
+        const subscription = event.data.object as Stripe.Subscription;
         const clerkUserId = subscription.metadata.clerk_user_id;
 
         if (!clerkUserId) {
@@ -54,7 +53,7 @@ export const POST = async (request: Request) => {
 
         await (await clerkClient()).users.updateUserMetadata(clerkUserId, {
           publicMetadata: {
-            subscriptionPlan: null,
+            subscriptionPlan: "free",
           },
         });
         console.log(`Premium deactivated for user: ${clerkUserId}`);
@@ -62,8 +61,8 @@ export const POST = async (request: Request) => {
       }
     }
     return NextResponse.json({ received: true });
-  } catch (error: any) {
-    console.error(`Webhook Error: ${error.message}`);
-    return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
+  } catch (error) {
+    console.error(`Webhook Error: ${error instanceof Error ? error.message : "Unknown error"}`);
+    return new NextResponse(`Webhook Error: ${error instanceof Error ? error.message : "Unknown error"}`, { status: 400 });
   }
 };
