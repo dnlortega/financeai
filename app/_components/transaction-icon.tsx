@@ -37,7 +37,7 @@ const TransactionIcon = ({ transaction }: TransactionIconProps) => {
 
   // Fallback padrão para o ícone do método de pagamento
   return (
-    <div className={cn("rounded-lg bg-white bg-opacity-[3%] p-3 text-white shadow-sm", borderClass)}>
+    <div className={cn("rounded-lg bg-muted p-3 text-foreground shadow-sm", borderClass)}>
       <Image
         src={`/${TRANSACTION_PAYMENT_METHOD_ICONS[transaction.paymentMethod]}`}
         height={20}

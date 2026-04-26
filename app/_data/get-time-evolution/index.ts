@@ -15,15 +15,26 @@ export const getTimeEvolution = async (year: string): Promise<TimeEvolutionData[
     throw new Error("Unauthorized");
   }
 
-  const transactions = await db.transaction.findMany({
-    where: {
-      userId,
-      date: {
-        gte: new Date(`${year}-01-01`),
-        lte: new Date(`${year}-12-31`),
+  const [transactions, investmentsTable] = await Promise.all([
+    db.transaction.findMany({
+      where: {
+        userId,
+        date: {
+          gte: new Date(`${year}-01-01`),
+          lte: new Date(`${year}-12-31`),
+        },
       },
-    },
-  });
+    }),
+    db.investment.findMany({
+      where: {
+        userId,
+        purchaseDate: {
+          gte: new Date(`${year}-01-01`),
+          lte: new Date(`${year}-12-31`),
+        },
+      },
+    }),
+  ]);
 
   const months = [
     "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
@@ -32,6 +43,7 @@ export const getTimeEvolution = async (year: string): Promise<TimeEvolutionData[
 
   const evolution = months.map((month, index) => {
     const monthTransactions = transactions.filter(t => t.date.getMonth() === index);
+    const monthInvestmentsTable = investmentsTable.filter(i => i.purchaseDate.getMonth() === index);
     
     return {
       month,
@@ -43,7 +55,8 @@ export const getTimeEvolution = async (year: string): Promise<TimeEvolutionData[
         .reduce((acc, t) => acc + Number(t.amount), 0),
       investments: monthTransactions
         .filter(t => t.type === TransactionType.INVESTMENT)
-        .reduce((acc, t) => acc + Number(t.amount), 0),
+        .reduce((acc, t) => acc + Number(t.amount), 0) +
+        monthInvestmentsTable.reduce((acc, i) => acc + Number(i.amount), 0),
     };
   });
 

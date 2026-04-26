@@ -5,8 +5,8 @@ import { InvestmentAsset } from "@/app/_data/get-investments";
 import { INVESTMENT_TYPE_LABELS } from "@/app/_constants/transactions";
 import { formatCurrency } from "@/app/_utils/currency";
 
-import EditInvestmentButton from "./_components/edit-investment-button";
-import DeleteInvestmentButton from "./_components/delete-investment-button";
+import EditInvestmentButton from "../_components/edit-investment-button";
+import DeleteInvestmentButton from "../_components/delete-investment-button";
 
 export const investmentColumns: ColumnDef<InvestmentAsset>[] = [
   {
