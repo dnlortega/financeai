@@ -26,8 +26,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { Switch } from "./ui/switch";
 import {
   TRANSACTION_CATEGORY_OPTIONS,
+  TRANSACTION_FREQUENCY_OPTIONS,
   TRANSACTION_PAYMENT_METHOD_OPTIONS,
   TRANSACTION_TYPE_OPTIONS,
 } from "../_constants/transactions";
@@ -37,10 +39,14 @@ import {
   TransactionType,
   TransactionCategory,
   TransactionPaymentMethod,
+  TransactionFrequency,
 } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { upsertTransaction } from "../_actions/upsert-transaction";
+import { categorizeWithAI } from "../_actions/categorize-with-ai";
+import { SparklesIcon, Loader2Icon } from "lucide-react";
+import { useState } from "react";
 
 interface UpsertTransactionDialogProps {
   isOpen: boolean;
@@ -72,6 +78,8 @@ const formSchema = z.object({
   date: z.date({
     required_error: "A data é obrigatória.",
   }),
+  isRecurring: z.boolean().default(false),
+  frequency: z.nativeEnum(TransactionFrequency).optional().nullable(),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
@@ -82,6 +90,8 @@ const UpsertTransactionDialog = ({
   transactionId,
   setIsOpen,
 }: UpsertTransactionDialogProps) => {
+  const [isCategorizing, setIsCategorizing] = useState(false);
+
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues ?? {
@@ -91,8 +101,25 @@ const UpsertTransactionDialog = ({
       name: "",
       paymentMethod: TransactionPaymentMethod.CASH,
       type: TransactionType.EXPENSE,
+      isRecurring: false,
+      frequency: null,
     },
   });
+
+  const handleCategorizeWithAI = async () => {
+    const name = form.getValues("name");
+    if (!name) return;
+
+    setIsCategorizing(true);
+    try {
+      const category = await categorizeWithAI(name);
+      form.setValue("category", category);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsCategorizing(false);
+    }
+  };
 
   const onSubmit = async (data: FormSchema) => {
     try {
@@ -105,6 +132,7 @@ const UpsertTransactionDialog = ({
   };
 
   const isUpdate = Boolean(transactionId);
+  const isRecurring = form.watch("isRecurring");
 
   return (
     <Dialog
@@ -134,7 +162,22 @@ const UpsertTransactionDialog = ({
                 <FormItem>
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
-                    <Input placeholder="Digite o nome..." {...field} />
+                    <div className="flex items-center gap-2">
+                      <Input placeholder="Digite o nome..." {...field} />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={handleCategorizeWithAI}
+                        disabled={isCategorizing || !field.value}
+                      >
+                        {isCategorizing ? (
+                          <Loader2Icon className="animate-spin" />
+                        ) : (
+                          <SparklesIcon className="text-primary" />
+                        )}
+                      </Button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -249,17 +292,67 @@ const UpsertTransactionDialog = ({
               />
             </div>
 
-            <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Data</FormLabel>
-                  <DatePicker value={field.value} onChange={field.onChange} />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Data</FormLabel>
+                    <DatePicker value={field.value} onChange={field.onChange} />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="isRecurring"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                      <FormLabel>Recorrente</FormLabel>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {isRecurring && (
+              <FormField
+                control={form.control}
+                name="frequency"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Frequência</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value ?? undefined}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione a frequência..." />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {TRANSACTION_FREQUENCY_OPTIONS.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
             <DialogFooter className="pt-4">
               <DialogClose asChild>
                 <Button type="button" variant="outline">

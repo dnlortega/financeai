@@ -1,8 +1,25 @@
 import {
   TransactionCategory,
+  TransactionFrequency,
   TransactionPaymentMethod,
   TransactionType,
+  InvestmentType,
 } from "@prisma/client";
+
+export const TRANSACTION_FREQUENCY_LABELS = {
+  [TransactionFrequency.DAILY]: "Diário",
+  [TransactionFrequency.WEEKLY]: "Semanal",
+  [TransactionFrequency.MONTHLY]: "Mensal",
+  [TransactionFrequency.YEARLY]: "Anual",
+};
+
+export const INVESTMENT_TYPE_LABELS = {
+  [InvestmentType.STOCK]: "Ações",
+  [InvestmentType.CRYPTO]: "Cripto",
+  [InvestmentType.FIXED_INCOME]: "Renda Fixa",
+  [InvestmentType.REAL_ESTATE]: "Imóveis",
+  [InvestmentType.OTHER]: "Outros",
+};
 
 export const TRANSACTION_PAYMENT_METHOD_ICONS = {
   [TransactionPaymentMethod.CREDIT_CARD]: "credit-card.svg",
@@ -124,3 +141,17 @@ export const TRANSACTION_CATEGORY_OPTIONS = [
     label: TRANSACTION_CATEGORY_LABELS[TransactionCategory.UTILITY],
   },
 ];
+
+export const TRANSACTION_FREQUENCY_OPTIONS = Object.entries(
+  TRANSACTION_FREQUENCY_LABELS,
+).map(([value, label]) => ({
+  value: value as TransactionFrequency,
+  label,
+}));
+
+export const INVESTMENT_TYPE_OPTIONS = Object.entries(
+  INVESTMENT_TYPE_LABELS,
+).map(([value, label]) => ({
+  value: value as InvestmentType,
+  label,
+}));

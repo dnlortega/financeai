@@ -7,6 +7,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { ScrollArea } from "../_components/ui/scroll-area";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
+import ExportCsvButton from "./_components/export-csv-button";
 
 const TransactionsPage = async () => {
   const { userId } = await auth();
@@ -31,7 +32,10 @@ const TransactionsPage = async () => {
         {/* TÍTULO E BOTÃO */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <h1 className="text-2xl font-bold">Transações</h1>
-          <AddTransactionButton userCanAddTransaction={userCanAddTransaction} />
+          <div className="flex items-center gap-3">
+            <ExportCsvButton transactions={transactions} />
+            <AddTransactionButton userCanAddTransaction={userCanAddTransaction} />
+          </div>
         </div>
         <ScrollArea>
           <DataTable columns={transactionColumns} data={transactions} />

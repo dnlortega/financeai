@@ -4,6 +4,7 @@ import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import {
   TransactionCategory,
+  TransactionFrequency,
   TransactionPaymentMethod,
   TransactionType,
 } from "@prisma/client";
@@ -18,6 +19,8 @@ interface UpsertTransactionParams {
   category: TransactionCategory;
   paymentMethod: TransactionPaymentMethod;
   date: Date;
+  isRecurring?: boolean;
+  frequency?: TransactionFrequency | null;
 }
 
 export const upsertTransaction = async (params: UpsertTransactionParams) => {

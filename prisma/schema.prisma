@@ -24,12 +24,53 @@ model Transaction {
   createdAt     DateTime                 @default(now())
   updatedAt     DateTime                 @updatedAt
   userId        String
+  
+  // Recurring Transactions
+  isRecurring   Boolean                  @default(false)
+  frequency     TransactionFrequency?
+}
+
+model UserBudget {
+  id        String              @id @default(uuid())
+  userId    String
+  category  TransactionCategory
+  amount    Decimal             @db.Decimal(10, 2)
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+
+  @@unique([userId, category])
+}
+
+model Investment {
+  id            String          @id @default(uuid())
+  userId        String
+  name          String
+  type          InvestmentType
+  amount        Decimal         @db.Decimal(10, 2)
+  purchaseDate  DateTime
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 }
 
 enum TransactionType {
   DEPOSIT
   EXPENSE
   INVESTMENT
+}
+
+enum TransactionFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum InvestmentType {
+  STOCK
+  CRYPTO
+  FIXED_INCOME
+  REAL_ESTATE
+  OTHER
 }
 
 enum TransactionCategory {
@@ -53,3 +94,4 @@ enum TransactionPaymentMethod {
   PIX
   OTHER
 }
+

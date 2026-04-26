@@ -1,0 +1,51 @@
+import { db } from "@/app/_lib/prisma";
+import { auth } from "@clerk/nextjs/server";
+import { TransactionType } from "@prisma/client";
+
+export interface TimeEvolutionData {
+  month: string;
+  deposits: number;
+  expenses: number;
+  investments: number;
+}
+
+export const getTimeEvolution = async (year: string): Promise<TimeEvolutionData[]> => {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  const transactions = await db.transaction.findMany({
+    where: {
+      userId,
+      date: {
+        gte: new Date(`${year}-01-01`),
+        lte: new Date(`${year}-12-31`),
+      },
+    },
+  });
+
+  const months = [
+    "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+    "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+  ];
+
+  const evolution = months.map((month, index) => {
+    const monthTransactions = transactions.filter(t => t.date.getMonth() === index);
+    
+    return {
+      month,
+      deposits: monthTransactions
+        .filter(t => t.type === TransactionType.DEPOSIT)
+        .reduce((acc, t) => acc + Number(t.amount), 0),
+      expenses: monthTransactions
+        .filter(t => t.type === TransactionType.EXPENSE)
+        .reduce((acc, t) => acc + Number(t.amount), 0),
+      investments: monthTransactions
+        .filter(t => t.type === TransactionType.INVESTMENT)
+        .reduce((acc, t) => acc + Number(t.amount), 0),
+    };
+  });
+
+  return evolution;
+};

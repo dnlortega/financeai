@@ -12,6 +12,9 @@ import { canUserAddTransaction } from "../_data/can-user-add-transaction";
 import AiReportButton from "./_components/ai-report-button";
 
 import { getAvailableMonths } from "../_data/get-available-months";
+import { getTimeEvolution } from "../_data/get-time-evolution";
+import TimeEvolutionChart from "./_components/time-evolution-chart";
+import { getBudgets } from "../_data/get-budgets";
 
 interface HomeProps {
   searchParams: Promise<{
@@ -32,12 +35,14 @@ const Home = async (props: HomeProps) => {
   if (monthIsInvalid || yearIsInvalid) {
     redirect(`?month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}`);
   }
-  const [dashboard, availableMonths, userCanAddTransaction, user] =
+  const [dashboard, availableMonths, userCanAddTransaction, user, timeEvolution, budgets] =
     await Promise.all([
       getDashboard(month, year),
       getAvailableMonths(),
       canUserAddTransaction(),
       (await clerkClient()).users.getUser(userId),
+      getTimeEvolution(year),
+      getBudgets(),
     ]);
   return (
     <>
@@ -62,11 +67,13 @@ const Home = async (props: HomeProps) => {
               {...dashboard}
               userCanAddTransaction={userCanAddTransaction}
             />
+            <TimeEvolutionChart data={timeEvolution} />
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               <TransactionsPieChart {...dashboard} />
               <div className="md:col-span-2">
                 <ExpensesPerCategory
                   expensesPerCategory={dashboard.totalExpensePerCategory}
+                  budgets={budgets}
                 />
               </div>
             </div>
