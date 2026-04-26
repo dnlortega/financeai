@@ -7,20 +7,35 @@ export interface Budget {
   amount: number;
 }
 
-export const getBudgets = async (): Promise<Budget[]> => {
+export interface BudgetsData {
+  categoryBudgets: Budget[];
+  totalBudget: number | null;
+}
+
+export const getBudgets = async (): Promise<BudgetsData> => {
   const { userId } = await auth();
   if (!userId) {
     throw new Error("Unauthorized");
   }
 
-  const budgets = await db.userBudget.findMany({
-    where: {
-      userId,
-    },
-  });
+  const [budgets, totalBudget] = await Promise.all([
+    db.userBudget.findMany({
+      where: {
+        userId,
+      },
+    }),
+    db.userTotalBudget.findUnique({
+      where: {
+        userId,
+      },
+    }),
+  ]);
 
-  return budgets.map((b) => ({
-    category: b.category,
-    amount: Number(b.amount),
-  }));
+  return {
+    categoryBudgets: budgets.map((b) => ({
+      category: b.category,
+      amount: Number(b.amount),
+    })),
+    totalBudget: totalBudget ? Number(totalBudget.amount) : null,
+  };
 };

@@ -41,6 +41,14 @@ model UserBudget {
   @@unique([userId, category])
 }
 
+model UserTotalBudget {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  amount    Decimal  @db.Decimal(10, 2)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Investment {
   id            String          @id @default(uuid())
   userId        String

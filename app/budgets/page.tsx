@@ -4,6 +4,7 @@ import Navbar from "../_components/navbar";
 import { getBudgets } from "../_data/get-budgets";
 import { TransactionCategory } from "@prisma/client";
 import BudgetItem from "./_components/budget-item";
+import TotalBudgetItem from "./_components/total-budget-item";
 
 const BudgetsPage = async () => {
   const { userId } = await auth();
@@ -11,10 +12,10 @@ const BudgetsPage = async () => {
     redirect("/login");
   }
 
-  const budgets = await getBudgets();
+  const { categoryBudgets, totalBudget } = await getBudgets();
 
   const categories = Object.values(TransactionCategory).filter(
-    (c) => c !== TransactionCategory.SALARY // Não faz sentido ter orçamento para salário
+    (c) => c !== TransactionCategory.SALARY
   );
 
   return (
@@ -24,13 +25,17 @@ const BudgetsPage = async () => {
         <div>
           <h1 className="text-2xl font-bold">Limites de Gastos</h1>
           <p className="text-muted-foreground text-foreground opacity-70">
-            Defina quanto você pretende gastar em cada categoria por mês.
+            Gerencie seu orçamento global e por categoria.
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          {categories.map((category) => {
-            const budget = budgets.find((b) => b.category === category);
+        <TotalBudgetItem initialAmount={totalBudget || 0} />
+
+        <div className="space-y-4">
+          <h2 className="text-xl font-bold">Limites por Categoria</h2>
+          <div className="grid gap-4 md:grid-cols-2">
+            {categories.map((category) => {
+              const budget = categoryBudgets.find((b) => b.category === category);
             return (
               <BudgetItem
                 key={category}

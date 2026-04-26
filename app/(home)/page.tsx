@@ -66,6 +66,7 @@ const Home = async (props: HomeProps) => {
               month={month}
               {...dashboard}
               userCanAddTransaction={userCanAddTransaction}
+              totalBudget={budgets.totalBudget}
             />
             <TimeEvolutionChart data={timeEvolution} />
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">

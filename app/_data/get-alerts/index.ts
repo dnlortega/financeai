@@ -9,15 +9,37 @@ export interface Alert {
 }
 
 export const getAlerts = async (month: string, year: string): Promise<Alert[]> => {
-  const [dashboard, budgets] = await Promise.all([
+  const [dashboard, { categoryBudgets, totalBudget }] = await Promise.all([
     getDashboard(month, year),
     getBudgets(),
   ]);
 
   const alerts: Alert[] = [];
 
+  // Alerta de Gasto Total
+  if (totalBudget && totalBudget > 0) {
+    const totalExpenses = dashboard.expensesTotal;
+    const percentage = (totalExpenses / totalBudget) * 100;
+    
+    if (percentage >= 100) {
+      alerts.push({
+        id: "total-budget-danger",
+        title: "Limite Total Atingido!",
+        description: `Você gastou R$ ${totalExpenses}, ultrapassando seu limite total de R$ ${totalBudget}.`,
+        type: "danger",
+      });
+    } else if (percentage >= 80) {
+      alerts.push({
+        id: "total-budget-warning",
+        title: "Cuidado com o Gasto Total",
+        description: `Você já utilizou ${Math.round(percentage)}% do seu limite total mensal.`,
+        type: "warning",
+      });
+    }
+  }
+
   dashboard.totalExpensePerCategory.forEach((category) => {
-    const budget = budgets.find((b) => b.category === category.category);
+    const budget = categoryBudgets.find((b) => b.category === category.category);
     if (budget && budget.amount > 0) {
       const percentage = (category.totalAmount / budget.amount) * 100;
       
