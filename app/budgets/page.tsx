@@ -44,6 +44,7 @@ const BudgetsPage = async () => {
               />
             );
           })}
+          </div>
         </div>
       </div>
     </>
