@@ -5,6 +5,7 @@ import { InvestmentType } from "@prisma/client";
 export interface InvestmentAsset {
   id: string;
   name: string;
+  broker?: string | null;
   type: InvestmentType;
   amount: number;
   purchaseDate: Date;

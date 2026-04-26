@@ -46,6 +46,7 @@ const formSchema = z.object({
   name: z.string().trim().min(1, {
     message: "O nome é obrigatório.",
   }),
+  broker: z.string().trim().optional(),
   amount: z
     .number({
       required_error: "O valor é obrigatório.",
@@ -74,6 +75,7 @@ const UpsertInvestmentDialog = ({
     defaultValues: defaultValues ?? {
       amount: 100,
       name: "",
+      broker: "",
       type: InvestmentType.STOCK,
       purchaseDate: new Date(),
     },
@@ -117,6 +119,19 @@ const UpsertInvestmentDialog = ({
                   <FormLabel>Nome do Ativo</FormLabel>
                   <FormControl>
                     <Input placeholder="Ex: PETR4, BTC, CDB Pos..." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="broker"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Corretora / Banco</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ex: Nubank, XP, Binance..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

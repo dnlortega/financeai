@@ -9,6 +9,7 @@ import { z } from "zod";
 const upsertInvestmentSchema = z.object({
   id: z.string().optional(),
   name: z.string().trim().min(1),
+  broker: z.string().trim().optional().nullable(),
   amount: z.number().positive(),
   type: z.nativeEnum(InvestmentType),
   purchaseDate: z.date(),

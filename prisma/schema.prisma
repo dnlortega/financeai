@@ -45,6 +45,7 @@ model Investment {
   id            String          @id @default(uuid())
   userId        String
   name          String
+  broker        String?         // Instituição (ex: Nubank, XP, Binance)
   type          InvestmentType
   amount        Decimal         @db.Decimal(10, 2)
   purchaseDate  DateTime

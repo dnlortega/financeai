@@ -11,6 +11,13 @@ export const investmentColumns: ColumnDef<InvestmentAsset>[] = [
     header: "Ativo",
   },
   {
+    accessorKey: "broker",
+    header: "Instituição",
+    cell: ({ row: { original: investment } }) => {
+      return investment.broker || "-";
+    },
+  },
+  {
     accessorKey: "type",
     header: "Tipo",
     cell: ({ row: { original: investment } }) => {
