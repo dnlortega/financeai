@@ -3,7 +3,7 @@ import { Progress } from "@/app/_components/ui/progress";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { TRANSACTION_CATEGORY_LABELS } from "@/app/_constants/transactions";
 import { TotalExpensePerCategory } from "@/app/_data/get-dashboard/types";
-import { UserBudget } from "@/app/_data/get-budgets";
+import { Budget } from "@/app/_data/get-budgets";
 import UpsertBudgetDialog from "@/app/_components/upsert-budget-dialog";
 import { formatCurrency } from "@/app/_utils/currency";
 
