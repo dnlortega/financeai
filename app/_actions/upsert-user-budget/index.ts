@@ -1,3 +1,5 @@
+"use server";
+
 import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { TransactionCategory } from "@prisma/client";
