@@ -74,7 +74,7 @@ const Home = async (props: HomeProps) => {
               <div className="md:col-span-2">
                 <ExpensesPerCategory
                   expensesPerCategory={dashboard.totalExpensePerCategory}
-                  budgets={budgets}
+                  categoryBudgets={budgets.categoryBudgets}
                 />
               </div>
             </div>

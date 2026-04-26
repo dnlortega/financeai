@@ -9,12 +9,12 @@ import { formatCurrency } from "@/app/_utils/currency";
 
 interface ExpensesPerCategoryProps {
   expensesPerCategory: TotalExpensePerCategory[];
-  budgets: UserBudget[];
+  categoryBudgets: Budget[];
 }
 
 const ExpensesPerCategory = ({
   expensesPerCategory,
-  budgets,
+  categoryBudgets,
 }: ExpensesPerCategoryProps) => {
   return (
     <ScrollArea className="col-span-2 h-full rounded-md border pb-6">
@@ -25,7 +25,7 @@ const ExpensesPerCategory = ({
 
       <CardContent className="space-y-6">
         {expensesPerCategory.map((category) => {
-          const budget = budgets.find((b) => b.category === category.category);
+          const budget = categoryBudgets.find((b) => b.category === category.category);
           const budgetAmount = budget?.amount || 0;
           const percentageOfBudget = budgetAmount
             ? Math.round((category.totalAmount / budgetAmount) * 100)
