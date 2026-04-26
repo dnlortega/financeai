@@ -46,7 +46,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { upsertTransaction } from "../_actions/upsert-transaction";
 import { categorizeWithAI } from "../_actions/categorize-with-ai";
 import { SparklesIcon, Loader2Icon } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface UpsertTransactionDialogProps {
   isOpen: boolean;
@@ -105,6 +105,12 @@ const UpsertTransactionDialog = ({
       frequency: null,
     },
   });
+
+  useEffect(() => {
+    if (isOpen && defaultValues) {
+      form.reset(defaultValues);
+    }
+  }, [isOpen, defaultValues, form]);
 
   const handleCategorizeWithAI = async () => {
     const name = form.getValues("name");

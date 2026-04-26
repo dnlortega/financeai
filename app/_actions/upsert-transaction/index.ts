@@ -29,12 +29,16 @@ export const upsertTransaction = async (params: UpsertTransactionParams) => {
   if (!userId) {
     throw new Error("Unauthorized");
   }
+
+  const { id, ...data } = params;
+
   await db.transaction.upsert({
-    update: { ...params, userId },
-    create: { ...params, userId },
+    update: { ...data, userId },
+    create: { ...data, userId },
     where: {
-      id: params?.id ?? "",
+      id: id ?? "",
     },
   });
   revalidatePath("/transactions");
+  revalidatePath("/");
 };

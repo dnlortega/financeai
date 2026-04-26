@@ -1,6 +1,7 @@
 import { UserButton } from "@clerk/nextjs";
 import NavbarAlerts from "./navbar-alerts";
 import { getAlerts } from "../_data/get-alerts";
+import { ModeToggle } from "./mode-toggle";
 
 const NavbarRight = async () => {
   const now = new Date();
@@ -12,6 +13,7 @@ const NavbarRight = async () => {
   return (
     <div className="flex items-center gap-4 shrink-0 pl-4">
       <NavbarAlerts alerts={alerts} />
+      <ModeToggle />
       <UserButton showName />
     </div>
   );
