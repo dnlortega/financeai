@@ -7,12 +7,16 @@ import { Transaction, TransactionType } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 
+type TransactionWithNumberAmount = Omit<Transaction, "amount"> & {
+  amount: number;
+};
+
 interface LastTransactionsProps {
-  lastTransactions: (Omit<Transaction, "amount"> & { amount: number })[];
+  lastTransactions: TransactionWithNumberAmount[];
 }
 
 const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
-  const getAmountColor = (transaction: Transaction) => {
+  const getAmountColor = (transaction: TransactionWithNumberAmount) => {
     if (transaction.type === TransactionType.EXPENSE) {
       return "text-red-500";
     }
@@ -21,7 +25,7 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
     }
     return "text-white";
   };
-  const getAmountPrefix = (transaction: Transaction) => {
+  const getAmountPrefix = (transaction: TransactionWithNumberAmount) => {
     if (transaction.type === TransactionType.DEPOSIT) {
       return "+";
     }
