@@ -1,8 +1,5 @@
 "use client";
 
-import { TrashIcon } from "lucide-react";
-import { Button } from "@/app/_components/ui/button";
-import { deleteTransaction } from "@/app/_actions/delete-transaction";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,6 +11,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/app/_components/ui/alert-dialog";
+import { Button } from "@/app/_components/ui/button";
+import { TrashIcon } from "lucide-react";
+import { deleteTransaction } from "@/app/_actions/delete-transaction";
 
 interface DeleteTransactionButtonProps {
   transactionId: string;
@@ -39,7 +39,7 @@ const DeleteTransactionButton = ({
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Você deseja realmente excluir essa transação?</AlertDialogTitle>
+          <AlertDialogTitle>Você deseja realmente excluir esta transação?</AlertDialogTitle>
           <AlertDialogDescription>
             Essa ação não pode ser desfeita.
           </AlertDialogDescription>
