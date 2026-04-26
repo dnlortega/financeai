@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface LastTransactionsProps {
-  lastTransactions: Transaction[];
+  lastTransactions: (Omit<Transaction, "amount"> & { amount: number })[];
 }
 
 const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
