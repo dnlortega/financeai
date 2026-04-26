@@ -34,6 +34,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { upsertInvestment } from "@/app/_actions/upsert-investment";
 import { INVESTMENT_TYPE_OPTIONS } from "@/app/_constants/transactions";
+import { useEffect } from "react";
 
 interface UpsertInvestmentDialogProps {
   isOpen: boolean;
@@ -80,6 +81,12 @@ const UpsertInvestmentDialog = ({
       purchaseDate: new Date(),
     },
   });
+
+  useEffect(() => {
+    if (isOpen && defaultValues) {
+      form.reset(defaultValues);
+    }
+  }, [isOpen, defaultValues, form]);
 
   const onSubmit = async (data: FormSchema) => {
     try {

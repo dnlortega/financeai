@@ -5,6 +5,9 @@ import { InvestmentAsset } from "@/app/_data/get-investments";
 import { INVESTMENT_TYPE_LABELS } from "@/app/_constants/transactions";
 import { formatCurrency } from "@/app/_utils/currency";
 
+import EditInvestmentButton from "./_components/edit-investment-button";
+import DeleteInvestmentButton from "./_components/delete-investment-button";
+
 export const investmentColumns: ColumnDef<InvestmentAsset>[] = [
   {
     accessorKey: "name",
@@ -36,6 +39,18 @@ export const investmentColumns: ColumnDef<InvestmentAsset>[] = [
     header: "Data de Compra",
     cell: ({ row: { original: investment } }) => {
       return new Date(investment.purchaseDate).toLocaleDateString("pt-BR");
+    },
+  },
+  {
+    accessorKey: "actions",
+    header: "Ações",
+    cell: ({ row: { original: investment } }) => {
+      return (
+        <div className="space-x-1">
+          <EditInvestmentButton investment={investment} />
+          <DeleteInvestmentButton investmentId={investment.id} />
+        </div>
+      );
     },
   },
 ];
