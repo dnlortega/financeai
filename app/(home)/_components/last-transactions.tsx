@@ -7,9 +7,7 @@ import { Transaction, TransactionType } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 
-type TransactionWithNumberAmount = Omit<Transaction, "amount"> & {
-  amount: number;
-};
+import { TransactionWithNumberAmount } from "@/app/_data/get-dashboard/types";
 
 interface LastTransactionsProps {
   lastTransactions: TransactionWithNumberAmount[];

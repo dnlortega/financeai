@@ -6,8 +6,10 @@ import { Transaction } from "@prisma/client";
 import { PencilIcon } from "lucide-react";
 import { useState } from "react";
 
+import { TransactionWithNumberAmount } from "@/app/_data/get-dashboard/types";
+
 interface EditTransactionButtonProps {
-  transaction: Transaction;
+  transaction: TransactionWithNumberAmount;
 }
 
 const EditTransactionButton = ({ transaction }: EditTransactionButtonProps) => {

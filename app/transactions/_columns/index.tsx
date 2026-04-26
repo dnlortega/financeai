@@ -11,7 +11,9 @@ import {
 } from "@/app/_constants/transactions";
 import EditTransactionButton from "../_components/edit-transaction-button";
 
-export const transactionColumns: ColumnDef<Transaction>[] = [
+import { TransactionWithNumberAmount } from "@/app/_data/get-dashboard/types";
+
+export const transactionColumns: ColumnDef<TransactionWithNumberAmount>[] = [
   {
     accessorKey: "name",
     header: "Nome",
