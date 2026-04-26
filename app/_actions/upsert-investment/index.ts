@@ -17,6 +17,7 @@ const upsertInvestmentSchema = z.object({
 type UpsertInvestmentParams = z.infer<typeof upsertInvestmentSchema>;
 
 export const upsertInvestment = async (params: UpsertInvestmentParams) => {
+  upsertInvestmentSchema.parse(params);
   const { userId } = await auth();
   if (!userId) {
     throw new Error("Unauthorized");

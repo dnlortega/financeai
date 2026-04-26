@@ -5,7 +5,7 @@ import { TRANSACTION_CATEGORY_LABELS } from "@/app/_constants/transactions";
 import { TotalExpensePerCategory } from "@/app/_data/get-dashboard/types";
 import { UserBudget } from "@/app/_data/get-budgets";
 import UpsertBudgetDialog from "@/app/_components/upsert-budget-dialog";
-import { formatCurrency } from "@/app/_lib/currency";
+import { formatCurrency } from "@/app/_utils/currency";
 
 interface ExpensesPerCategoryProps {
   expensesPerCategory: TotalExpensePerCategory[];

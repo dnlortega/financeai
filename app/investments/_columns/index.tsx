@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { InvestmentAsset } from "@/app/_data/get-investments";
 import { INVESTMENT_TYPE_LABELS } from "@/app/_constants/transactions";
-import { formatCurrency } from "@/app/_lib/currency";
+import { formatCurrency } from "@/app/_utils/currency";
 
 export const investmentColumns: ColumnDef<InvestmentAsset>[] = [
   {
