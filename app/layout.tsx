@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 };
 
 import { ThemeProvider } from "./_components/theme-provider";
+import { Toaster } from "@/app/_components/ui/sonner";
 
 export default function RootLayout({
   children,
@@ -37,6 +38,7 @@ export default function RootLayout({
             <div className="flex h-full flex-col overflow-y-auto">
               {children}
             </div>
+            <Toaster />
           </ThemeProvider>
         </ClerkProvider>
       </body>
