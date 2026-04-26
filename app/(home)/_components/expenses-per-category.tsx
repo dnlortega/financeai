@@ -30,6 +30,7 @@ const ExpensesPerCategory = ({
           const percentageOfBudget = budgetAmount
             ? Math.round((category.totalAmount / budgetAmount) * 100)
             : 0;
+          const isOverBudget = percentageOfBudget >= 100;
 
           return (
             <div key={category.category} className="space-y-2">
@@ -37,13 +38,16 @@ const ExpensesPerCategory = ({
                 <p className="text-sm font-bold">
                   {TRANSACTION_CATEGORY_LABELS[category.category]}
                 </p>
-                <p className="text-sm font-bold">
-                  {budgetAmount ? `${percentageOfBudget}% do orçamento` : `${category.percentageOfTotal}% do total`}
+                <p className={`text-sm font-bold ${isOverBudget ? "text-red-500" : ""}`}>
+                  {budgetAmount ? `${percentageOfBudget}% do limite` : `${category.percentageOfTotal}% do total`}
                 </p>
               </div>
-              <Progress value={budgetAmount ? percentageOfBudget : category.percentageOfTotal} />
+              <Progress 
+                value={budgetAmount ? percentageOfBudget : category.percentageOfTotal} 
+                className={isOverBudget ? "[&>div]:bg-red-500" : ""}
+              />
               {budgetAmount > 0 && (
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground text-foreground opacity-70">
                   {formatCurrency(category.totalAmount)} / {formatCurrency(budgetAmount)}
                 </p>
               )}
