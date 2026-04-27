@@ -11,7 +11,6 @@ const mulish = Mulish({
 export const metadata: Metadata = {
   title: "Finance AI - Gestão Financeira Inteligente",
   description: "Gerencie suas finanças com o poder da inteligência artificial.",
-  manifest: "/manifest.json",
 };
 
 import { ThemeProvider } from "./_components/theme-provider";
