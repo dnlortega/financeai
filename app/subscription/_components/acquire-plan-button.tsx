@@ -21,10 +21,17 @@ const AcquirePlanButton = () => {
       if (!stripe) {
         throw new Error("Stripe não inicializado");
       }
-      await stripe.redirectToCheckout({ sessionId });
+      const { error: stripeError } = await stripe.redirectToCheckout({ sessionId });
+      if (stripeError) {
+        throw new Error(stripeError.message);
+      }
     } catch (error) {
       console.error(error);
-      toast.error("Erro ao iniciar checkout. Verifique se as chaves do Stripe estão configuradas.");
+      if (error instanceof Error) {
+        toast.error(`Erro: ${error.message}`);
+      } else {
+        toast.error("Erro desconhecido ao iniciar checkout.");
+      }
     }
   };
   const hasPremiumPlan = user?.publicMetadata.subscriptionPlan == "premium";
