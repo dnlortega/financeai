@@ -15,13 +15,16 @@ export const getTimeEvolution = async (year: string): Promise<TimeEvolutionData[
     throw new Error("Unauthorized");
   }
 
+  const startDate = new Date(Number(year), 0, 1);
+  const endDate = new Date(Number(year), 11, 31, 23, 59, 59, 999);
+
   const [transactions, investmentsTable] = await Promise.all([
     db.transaction.findMany({
       where: {
         userId,
         date: {
-          gte: new Date(`${year}-01-01`),
-          lte: new Date(`${year}-12-31`),
+          gte: startDate,
+          lte: endDate,
         },
       },
     }),
@@ -29,8 +32,8 @@ export const getTimeEvolution = async (year: string): Promise<TimeEvolutionData[
       where: {
         userId,
         purchaseDate: {
-          gte: new Date(`${year}-01-01`),
-          lte: new Date(`${year}-12-31`),
+          gte: startDate,
+          lte: endDate,
         },
       },
     }),

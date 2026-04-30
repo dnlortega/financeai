@@ -8,11 +8,15 @@ export const getDashboard = async (month: string, year: string) => {
   if (!userId) {
     throw new Error("Unauthorized");
   }
+  // Usa o primeiro dia do mês na timezone local para evitar problemas de UTC
+  const startDate = new Date(Number(year), Number(month) - 1, 1);
+  const endDate = new Date(Number(year), Number(month), 0); // Último dia do mês
+  
   const where = {
     userId,
     date: {
-      gte: new Date(`${year}-${month}-01`),
-      lt: new Date(`${year}-${month}-31`),
+      gte: startDate,
+      lte: endDate,
     },
   };
   const [
@@ -37,8 +41,8 @@ export const getDashboard = async (month: string, year: string) => {
       where: {
         userId,
         purchaseDate: {
-          gte: new Date(`${year}-${month}-01`),
-          lt: new Date(`${year}-${month}-31`),
+          gte: startDate,
+          lte: endDate,
         },
       },
       _sum: { amount: true },
